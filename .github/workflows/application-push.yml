@@ -31,4 +31,4 @@ jobs:
       - name: Run kubectl
         uses: nikosch86/github-action-eks-kubectl@main
         with:
-          command: "apply application/k8s.yaml"
+          command: "apply -f application/k8s.yaml"
