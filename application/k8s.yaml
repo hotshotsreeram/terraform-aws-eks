@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+  labels:
+    name: namespace
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: banana-app
+  namespace: dev
+  labels:
+    app: banana
+spec:
+  containers:
+    - name: banana-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=banana"
+      resources:
+        limits:
+          cpu:  100m
+          memory: 100Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: banana-service
+  namespace: dev
+spec:
+  selector:
+    app: banana
+  ports:
+    - port: 5678 # Default port for image
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: apple-app
+  namespace: dev
+  labels:
+    app: apple
+spec:
+  containers:
+    - name: apple-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=apple"
+      resources:
+        limits:
+          cpu:  100m
+          memory: 100Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: apple-service
+  namespace: dev
+spec:
+  selector:
+    app: apple
+  ports:
+    - port: 5678 # Default port for image
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx-demo
+  namespace: dev
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: aece6fd3b5ec7443d836d99cc717530b-1196224505.us-east-1.elb.amazonaws.com
+    http:
+      paths:
+        - path: /apple
+          pathType: Prefix
+          backend:
+            service:
+              name: apple-service
+              port:
+                number: 5678
+        - path: /banana
+          pathType: Prefix
+          backend:
+            service:
+              name: banana-service
+              port:
+                number: 5678
