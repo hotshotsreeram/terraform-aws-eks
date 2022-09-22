@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - master
+      - interview
     paths:
       - 'application/k8s.yaml'
 
