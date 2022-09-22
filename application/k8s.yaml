@@ -88,7 +88,7 @@ spec:
   - host: aece6fd3b5ec7443d836d99cc717530b-1196224505.us-east-1.elb.amazonaws.com
     http:
       paths:
-        - path: /apple
+        - path: /apple1
           pathType: Prefix
           backend:
             service:
